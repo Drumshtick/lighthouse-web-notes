@@ -13,3 +13,7 @@ The following example shows two ways of specifying the same value in an object l
 const spam = "spam";
 person["dislikes"] = { food: spam, "e-mail": "spam" };
 ```
+
+# Object.keys
+To inspect an object's keys, there is a method ```javascriptObject.keys(...)``` that returns an array of keys.
+
