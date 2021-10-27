@@ -12,4 +12,4 @@
 
 We've already been introduced to objects, arrays, and of course functions, the latter two of which are technically a sub-category of objects. Objects ***(including arrays and functions and other types of objects)*** have properties.
 
-## The six primitive types, plus object, make up the seven fundamental types of JavaScript.
+## ****The six primitive types, plus object, make up the seven fundamental types of JavaScript.****
