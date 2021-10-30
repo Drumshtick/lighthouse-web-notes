@@ -140,3 +140,16 @@ Below:
 <!-- load your test files here -->
 ```
 **Once you’ve added the script, you can then load the test runner page in your browser of choice.**
+
+
+## Note
+* Ommiting the secound argument from (it("SUT as string, ID for what the goal of the test is", function()); // Function is the actual test logic) will label the test as PENDING
+  * This is useful for creating a testing todo list
+* Running tests on node
+  * In node things are only visible to other things in the same file.
+  * To expose the file and the testfile use ```require``` and ```export```
+  * Specifically: 
+    * Exporting file
+    * Requriing file in the testfile
+* To test in console you must:
+  * In order to test in console you must ```require('chai')```. However, there is no require in browser-based JavaScript. When testing in browser we do not include require('chai'). If we do include it in the browser, it will cause an error.
