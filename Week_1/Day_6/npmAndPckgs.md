@@ -89,3 +89,7 @@ This would ignore all .config files except for /appname/settings.sample.config. 
 * **Package.** Is a collection of modules. This may sound funny, but usually what a package does, is gather a number of modules holding in general the same functional purpose. Making it easier to include all the related modules at once.
 * **Library.** Well library at it's core, is a collections of packages. It's purpose is to offer a set of functionalities ready to use without worrying about the subsequent packages. So a library is what you include when you want to add some functionality to your code. It does not force any coding style on you either.
 * **Framework.** It's a set of libraries. But this time, the framework does not just offer functionalities, but it also provides an architecture for the development work. In other words you don't include a framework. You integrate you code into it. He is the wire frame of the project. That's why a framework forces its coding style on you.
+
+* ```npm install mocha chai --save-dev```
+  * installs moha and chai as a DEVELOPMENT DEPENDANCY
+  * devDependancies (under package.json) indicates that the dependancy is not required to run the project, rather it is for DEVELOPMENT PURPOSES ONLY
