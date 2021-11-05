@@ -1,4 +1,4 @@
-# Promises
+# Promises LOOK AT ISS_SPOTTER APP FOR DEMO
 **An official introductory description:** A promise *represents the eventual result of an asynchronous operation.* The primary way of interaction with a promise is through its ```then``` method, which **registers callbacks** to receive either *a promise’s eventual value* or the *reason why the promise cannot be fulfilled.*
 
 As we can see here, we don't avoid callbacks with promises. Instead, we wrap them into a promise.
