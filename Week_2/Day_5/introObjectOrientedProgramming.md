@@ -43,3 +43,6 @@ In this section we will learn about the fundamentals of OOP and how to use it in
 * OO is very important to learn due to its popularity
 * JavaScript is not strictly OO in the way that Java or Ruby are
 * Functional Programming is an alternative paradigm, and one that JavaScript also encourages
+
+## NOTE
+* Dependency Injection: It's a fancy word that simply means *****"passing an object the things it needs rather than having the object access them itself"*****. It makes for code that is much more modular and testable.
