@@ -21,4 +21,4 @@ One library that we will use to demonstrate client-side events is **jQuery**.
 
 Similarly, on a server running **Node.js** you can think of **an incoming request as an event,** with a callback function that handles the event (and could render a response).
 
-The Node.js core API provides an ```EventEmitter``` class that is basis for event-driven patterns.
+The Node.js core API provides an ```EventEmitter``` *class* that is basis for event-driven patterns.
