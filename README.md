@@ -22,4 +22,9 @@ This repository contains all of the notes taken by [Erik](https://github.com/Dru
   * [Day 4](/Week_3/Day_4)
   * [Day 5](/Week_3/Day_5)
   * [WE](/Week_3/we)
-
+* [Week 4](/Week_4)
+  * [Day 1](/Week_4/Day_1)
+  * [Day 2](/Week_4/Day_2)
+  * [Day 4](/Week_4/Day_4)
+  * [Day 5](/Week_4/Day_5)
+  * [WE](/Week_4/we)
