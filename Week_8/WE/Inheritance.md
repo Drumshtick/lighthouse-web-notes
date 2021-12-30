@@ -352,3 +352,191 @@
   ```
   * <u>***although the former is the preferred way.***</u>
 ## Private, Protected, and Public
+  * The last thing we want to cover **is something that's actually quite simple, but necessary; Method Access Control**.
+  * **Access Control** is a concept that exists in a number of programming languages, including Ruby.
+  * It is generally **implemented through the use of *access modifiers***.
+  * The purpose of access modifiers **is to allow or restrict access to a particular thing**.
+  * In Ruby, the **things that we are concerned with restricting access to *are the methods defined in a class***.
+  * In a Ruby context, therefore, you'll commonly see this concept **referred to as *Method Access Control***.
+  * The way that **Method Access Control** is implemented in Ruby ***is through the use of the public, private, and protected access modifiers***.
+  * Right now, **all the methods in our ```GoodDog``` class are public methods**.
+  * A **public method** ***is a method that is available to anyone who knows either the class name or the object's name***.
+    * These methods are **readily available for the rest of the program to use and comprise the class's interface** (that's how other classes and objects will interact with this class and its objects).
+  * **Sometimes you'll have methods that are doing work in the class but don't need to be available to the rest of the program.**
+    * ***These methods can be defined as private.***
+    * **How do we define private methods**?
+      * **We use the ```private``` method call** in our program and ***anything below it is private*** (**unless another method, like ```protected```, is called after it** to negate it).
+  * In our ```GoodDog``` class **we have one operation that takes place that we could move into a private method**.
+  * When we initialize an object, **we calculate the dog's age in Dog years**.
+    * Let's refactor this logic ***into a method and make it private so nothing outside of the class can use it***.
+    ```rb
+      class GoodDog
+        DOG_YEARS = 7
+
+        attr_accessor :name, :age
+
+        def initialize(n, a)
+          self.name = n
+          self.age = a
+        end
+
+        private
+
+        def human_years
+          age * DOG_YEARS
+        end
+      end
+
+      sparky = GoodDog.new("Sparky", 4)
+      sparky.human_years
+    ```
+    * We get the error message:
+    ```sh
+      NoMethodError: private method `human_years' called for
+        #<GoodDog:0x007f8f431441f8 @name="Sparky", @age=4>
+    ```
+    * We have made the ```human_years``` **method private by placing it under the ``private`` method**.
+    * **What is it good for, then, if we can't call it?**
+    * ``private`` methods **are only accessible from other methods in the class**.
+    * For example, given the above code, the following would be allowed:
+    ```rb
+      # assume the method definition below is above the "private" method
+
+      def public_disclosure
+        "#{self.name} in human years is #{human_years}"
+      end
+    ```
+    * Note that in this case, **we can not use ```self.human_years```, because the ```human_years``` method is private**.
+      * Remember that ```self.human_years``` ***is equivalent to ```sparky.human_years```,*** **which is not allowed for private methods.**
+      * Therefore, **we have to just use ```human_years```.**
+    * In summary, ```private``` ***methods are not accessible outside of the class definition at all***, and **are only accessible from inside the class *when called without self***.
+  ______________________________________________________________________________________________________________________________________________________________________
+  * ***<u>NOTE</u>***
+    * As of ```Ruby 2.7```, **it is now legal to call private methods with a literal ```self``` as the caller.**
+    * Note that this does not mean that we can call a private method with any other object, not even one of the same type. We can only call a private method with the current object.
+  ______________________________________________________________________________________________________________________________________________________________________
+  * **Public and private methods are most common**, but ***in some less common situations, we'll want an in-between approach***.
+  * We can **use the ```protected``` method to create protected methods**.
+    * The easiest way to understand ```protected``` methods **is to follow these two rules**:
+      * from ***inside* the class**, protected methods **are accessible just like public methods**.
+      * from ***outside* the class**, protected methods ***act* just like private methods**.
+  * Let's take a look at some examples:
+  ```rb
+    class Animal
+      def a_public_method
+        "Will this work? " + self.a_protected_method
+      end
+
+      protected
+
+      def a_protected_method
+        "Yes, I'm protected!"
+      end
+    end
+  ```
+  * Study the above code, as it's a little complicated. We'll create an Animal object and test it out.
+  ```rb
+    fido = Animal.new
+    fido.a_public_method        # => Will this work? Yes, I'm protected!
+  ```
+  * The above line of code **shows us that we can call a protected method ***from within the class*****, **even with ```self``` prepended.**
+  * **What about outside** of the class?
+  ```rb
+    fido.a_protected_method
+      # => NoMethodError: protected method `a_protected_method' called for
+        #<Animal:0x007fb174157110>
+  ```
+  * This demonstrates the second rule, that we can't call protected methods from outside of the class. The two rules for protected methods apply within the context of inheritance as well.
+  * There are **some exceptions** to this rule, but we won't worry about that yet.
+  * **Protected methods** are ***not used often in practice*** and that knowledge isn’t transferrable to other languages, so if you remember those two rules about protected methods, that should be good enough for the time being.
+  ______________________________________________________________________________________________________________________________________________________________________
+  * The **similarity** between ***Protected*** and ***Private*** :
+    * Both can be accessed from outside the class through a public method.
+  * The differences between Protected and Private are :
+    * **Private method** can **not be called with a receiver** (***not even with ```#self```***). UNLESS ... **calling a PRIVATE SETTER method**. If you try to remove the receiver, Ruby will create a local variable. ***Self is a must in this case***.
+    * ***```Protected``` may or may not use ```self```.***
+    * **Protected** can **access another object's protected method** that comes from the same class, ***Private can't.***
+  ______________________________________________________________________________________________________________________________________________________________________
+## Accidental Method Overriding
+  * It’s important to remember ***that every class you create inherently subclasses from class Object***. 
+    * The Object class is **built into Ruby and comes with many critical methods**.
+  ```rb
+    class Parent
+      def say_hi
+        p "Hi from Parent."
+      end
+    end
+
+    Parent.superclass       # => Object
+  ```
+  * This means that **methods defined in the ```Object``` class are available in all classes**.
+  * Further, recall that through the magic of inheritance, **a subclass can override a superclass’s method**.
+  ```rb
+    class Child < Parent
+      def say_hi
+        p "Hi from Child."
+      end
+    end
+
+    child = Child.new
+    child.say_hi         # => "Hi from Child."
+  ```
+  * This means that, **if you accidentally override a method** that was originally **defined in the Object class**, it ***can have far-reaching effects on your code***.
+    * ***For example***, ```send``` **is an instance method that all classes inherit from Object**.
+    * If you **defined a new** ```send``` instance method **in your class**, **all objects of your class will call your custom ```send``` method**, instead of the one in class Object, which is probably the one they mean to call.
+    * Object ```send``` **serves as a way to call a method by passing it a symbol or a string which represents the method you want to call**.
+    * **The next couple of arguments will represent the method's arguments**, if any.
+  * Let's see how ```send``` normally works **by making use of our Child class:**
+  ```rb
+    son = Child.new
+    son.send :say_hi       # => "Hi from Child."
+  ```
+  * Let's see what happens **when we define a ```send``` method in our Child class and then try to invoke Object's ```send``` method**:
+  ```rb
+    class Child
+      def say_hi
+        p "Hi from Child."
+      end
+
+      def send
+        p "send from Child..."
+      end
+    end
+
+    lad = Child.new
+    lad.send :say_hi
+  ```
+  * Normally **we would expect the output of this call to be** ***"Hi from Child."*** but upon running the code we get a completely different result:
+  ```sh
+    ArgumentError: wrong number of arguments (1 for 0)
+    from (pry):12:in `send'
+  ```
+  * In our example, **we're passing send one argument even though our overridden send method does not take any arguments.**
+  * Let's take a look at another example by **exploring Object's instance_of? method**.
+  * What this handy method does is **to return true if an object is an instance of a given class and false otherwise**. Let's see it in action:
+  ```rb
+    c = Child.new
+    c.instance_of? Child      # => true
+    c.instance_of? Parent     # => false
+  ```
+  * Now let's **override ```instance_of?```** within Child:
+  ```rb
+    class Child
+      # other methods omitted
+
+      def instance_of?
+        p "I am a fake instance"
+      end
+    end
+
+    heir = Child.new
+    heir.instance_of? Child
+  ```
+  * Again, we'll see something completely different though our intention was to use Object's instance_of? method:
+  ```sh
+    ArgumentError: wrong number of arguments (1 for 0)
+    from (pry):22:in `instance_of?'
+  ```
+  * That said, one ```Object``` **instance method that's easily overridden without any major side-effect is the ```to_s``` method.**
+  * You'll **normally want to do this when you want a different string representation of an object**.
+  * Overall, **it’s important to familiarize yourself with some of the common ```Object``` methods and make sure to not accidentally override them** as this can have devastating consequences for your application.
